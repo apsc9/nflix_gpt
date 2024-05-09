@@ -1,11 +1,22 @@
 import Header from "./Header";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { validateData } from "../utils/validate";
 
 const LogIn = () => {
 
   const [isSignedIn, setIsSignedIn] = useState(true);
+  const [errMessage, setErrMessage] = useState(null);
   const toggleSignIn = () => {
     setIsSignedIn(!isSignedIn);
+  };
+
+  const name = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
+
+  const handleButtonClick = () => {
+    const msg = validateData(name.current.value, email.current.value, password.current.value);
+    setErrMessage(msg);
   };
 
   return (
@@ -17,29 +28,34 @@ const LogIn = () => {
                 alt="logo"
             />
         </div>
-        <form className="w-3/12 absolute p-12 bg-black bg-opacity-80 my-36 mx-auto text-white right-0 left-0 rounded-lg">
+        <form onSubmit={(e) => e.preventDefault()} className="w-3/12 absolute p-12 bg-black bg-opacity-80 my-36 mx-auto text-white right-0 left-0 rounded-lg">
             <h1 className="font-bold text-3xl py-4">
                 {isSignedIn ? "Sign In" : "Sign Up"}
             </h1>
             {!isSignedIn && <input 
+                ref={name}
                 type="text" 
                 placeholder="Name" 
                 className="p-4 my-4 w-full bg-gray-800 rounded-lg" 
             />}
             <input 
+                ref={email}
                 type="text" 
                 placeholder="Email Address" 
                 className="p-4 my-4 w-full bg-gray-800 rounded-lg" 
             />
             <input 
+                ref={password}
                 type="password" 
                 placeholder="Password" 
                 className="p-4 my-4 w-full bg-gray-800 rounded-lg" 
             />
-            <button className="p-4 my-6 bg-red-600 w-full rounded-lg">
+            <p className="text-red-500 text-lg py-2">{errMessage}</p>
+            <button className="p-4 my-6 bg-red-600 w-full rounded-lg" 
+            onClick={handleButtonClick}>
                 {isSignedIn ? "Sign In" : "Sign Up"}
             </button>
-            <p className="py-6 cursor-pointer" onClick={toggleSignIn}>
+            <p className="py-6 cursor-pointer" >
                 {!isSignedIn ? (
                     <span>
                         Already a User?{" "}
