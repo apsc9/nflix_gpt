@@ -4,6 +4,14 @@
 - Configure tailwind for our app
 - Header
 - Login Form 
+- Form Validation
+- useRef Hook
+- Firebase setup
+- Deploying our app to prod
+- Create Signup user Account
+- Implement signIn user API
+- Created Redux store with userSlice
+
 
 
 # Features

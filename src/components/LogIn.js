@@ -1,22 +1,84 @@
 import Header from "./Header";
 import { useState, useRef } from "react";
 import { validateData } from "../utils/validate";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "../utils/firebase";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const LogIn = () => {
 
   const [isSignedIn, setIsSignedIn] = useState(true);
   const [errMessage, setErrMessage] = useState(null);
-  const toggleSignIn = () => {
-    setIsSignedIn(!isSignedIn);
-  };
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const name = useRef(null);
   const email = useRef(null);
   const password = useRef(null);
+  
+  const toggleSignIn = () => {
+    setIsSignedIn(!isSignedIn);
+  };
 
   const handleButtonClick = () => {
-    const msg = validateData(name.current.value, email.current.value, password.current.value);
+    const msg = validateData(email.current.value, password.current.value);
     setErrMessage(msg);
+    if(msg) return;
+
+    // Sign Up/ Sign In Logic
+    if (!isSignedIn){
+        // SignUp Logic
+        createUserWithEmailAndPassword(
+            auth, 
+            email.current.value, 
+            password.current.value
+        )
+        .then((userCredential) => {
+            // Signed up 
+            const user = userCredential.user;
+            updateProfile(user, {
+                displayName: name.current.value, 
+                photoURL: "https://as2.ftcdn.net/v2/jpg/01/75/59/71/1000_F_175597149_OQqkWaHHMhFq1Z05zJOKLDLPFPBQGyNV.jpg"
+              })
+              .then(() => {
+                const { uid, email, displayName, photoURL } = auth.currentUser;
+                dispatch(
+                    addUser({ 
+                        uid: uid, 
+                        email: email, 
+                        displayName: displayName, 
+                        photoURL: photoURL, 
+                    })
+                );
+                navigate("/browse");
+              })
+              .catch((error) => {
+                setErrMessage(error.message)
+              });
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrMessage(errorCode + " : " + errorMessage);
+        });
+    }
+    else {
+        // Sign In Logic 
+        signInWithEmailAndPassword(auth, email.current.value, password.current.value )
+        .then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            console.log(user)
+            navigate("/browse");
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            setErrMessage(errorCode + " : " + errorMessage);
+        });
+    }
   };
 
   return (
