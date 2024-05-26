@@ -6,8 +6,6 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const navigate = useNavigate();
   const user = useSelector((store) => store.user);
-  console.log("let's see photo URL");
-  console.log(user);
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
