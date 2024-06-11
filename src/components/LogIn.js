@@ -6,6 +6,7 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { USER_AVATAR } from "../utils/constants";
 
 const LogIn = () => {
 
@@ -40,7 +41,7 @@ const LogIn = () => {
             const user = userCredential.user;
             updateProfile(user, {
                 displayName: name.current.value, 
-                photoURL: "https://as2.ftcdn.net/v2/jpg/01/75/59/71/1000_F_175597149_OQqkWaHHMhFq1Z05zJOKLDLPFPBQGyNV.jpg"
+                photoURL: USER_AVATAR,
               })
               .then(() => {
                 const { uid, email, displayName, photoURL } = auth.currentUser;
