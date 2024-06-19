@@ -36,6 +36,10 @@
 - Gemini Search page and Gemini Search Bar
 - Multilingual features in our app 
 - Integrate Gemini APIs
+- Get Gemini API key and make search calls using API
+- Used memoization in hooks
+- Reused movie list to show movie suggestions from Gemini results
+- Make the app responsive
 
 
 
