@@ -32,7 +32,10 @@
 - TMDB Image CDN URL
 - Make Browse Page more interactive using tailwind css
 - usePopularMovies custom hook
-- use GPT search functionality 
+- use Gemini search functionality 
+- Gemini Search page and Gemini Search Bar
+- Multilingual features in our app 
+- Integrate Gemini APIs
 
 
 
